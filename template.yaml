@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: The Lambda function S3ObjectLambdaDecompression, is equipped to decompress objects stored in S3 in one of six compressed file formats including bzip2, gzip, snappy, zlib, zstandard and ZIP.
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: S3ObjectLambdaDecompression
+    Description: The Lambda function S3ObjectLambdaDecompression, is equipped to decompress objects stored in S3 in one of six compressed file formats including bzip2, gzip, snappy, zlib, zstandard and ZIP.
+    Author: S3 Object Lambda
+    Labels: ['Lambda','Decompression']
+    SemanticVersion: 1.0.0
+    SourceCodeUrl: https://github.com/aws-samples/amazon-s3-object-lambda-decompression
+    LicenseUrl: LICENSE
+    SpdxLicenseId: MIT-0
+
+Resources:
+  S3ObjectLambdaDecompressionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - 'sts:AssumeRole'
+      Description: Grants S3 Object Lambda WriteGetObjectResponse access on top of basic lambda rights
+      Policies:
+        - PolicyName: S3ObjectLambda
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action:
+                  - "s3-object-lambda:WriteGetObjectResponse"
+                Resource: "*"
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  CommonFunctionsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName : common-functions
+      ContentUri: lambda-code/layer
+      CompatibleRuntimes:
+        - python3.7
+    Metadata:
+      BuildMethod: python3.7
+
+  DecompressGZFunction:
+     Type: AWS::Serverless::Function
+     Properties:
+       Layers:
+         - !Ref CommonFunctionsLayer
+       Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
+       CodeUri: lambda-code/decompress_gz
+       Handler: lambda_function.decompress
+       Runtime: python3.7
+       Timeout: 900
+       MemorySize: 3008
+
+  DecompressZipFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
+      CodeUri: lambda-code/decompress_zip
+      Handler: example.Handler::handleRequest
+      Runtime: java11
+      Timeout: 900
+      MemorySize: 3008
+
+  DecompressBz2Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref CommonFunctionsLayer
+      Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
+      CodeUri: lambda-code/decompress_bz2
+      Handler: lambda_function.decompress
+      Runtime: python3.7
+      Timeout: 900
+      MemorySize: 3008
+
+  DecompressZlibFunction:
+     Type: AWS::Serverless::Function
+     Properties:
+       Layers:
+         - !Ref CommonFunctionsLayer
+       Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
+       CodeUri: lambda-code/decompress_zlib
+       Handler: lambda_function.decompress
+       Runtime: python3.7
+       Timeout: 900
+       MemorySize: 3008
+
+  DecompressZstdFunction:
+     Type: AWS::Serverless::Function
+     Properties:
+       Layers:
+         - !Ref CommonFunctionsLayer
+       Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
+       CodeUri: lambda-code/decompress_zstd
+       Handler: lambda_function.decompress
+       Runtime: python3.7
+       Timeout: 900
+       MemorySize: 3008
+     Metadata:
+       BuildMethod: makefile
+
+  DecompressSnappyFunction:
+     Type: AWS::Serverless::Function
+     Properties:
+       Layers:
+         - !Ref CommonFunctionsLayer
+       Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
+       CodeUri: lambda-code/decompress_snappy
+       Handler: lambda_function.decompress
+       Runtime: python3.7
+       Timeout: 900
+       MemorySize: 3008
+     Metadata:
+       BuildMethod: makefile
+
