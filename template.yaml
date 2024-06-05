@@ -45,9 +45,9 @@ Resources:
       LayerName : common-functions
       ContentUri: lambda-code/layer
       CompatibleRuntimes:
-        - python3.7
+        - python3.11
     Metadata:
-      BuildMethod: python3.7
+      BuildMethod: python3.11
 
   DecompressGZFunction:
      Type: AWS::Serverless::Function
@@ -57,7 +57,7 @@ Resources:
        Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
        CodeUri: lambda-code/decompress_gz
        Handler: lambda_function.decompress
-       Runtime: python3.7
+       Runtime: python3.11
        Timeout: 900
        MemorySize: 3008
 
@@ -67,7 +67,7 @@ Resources:
       Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
       CodeUri: lambda-code/decompress_zip
       Handler: example.Handler::handleRequest
-      Runtime: java11
+      Runtime: java21
       Timeout: 900
       MemorySize: 3008
 
@@ -79,7 +79,7 @@ Resources:
       Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
       CodeUri: lambda-code/decompress_bz2
       Handler: lambda_function.decompress
-      Runtime: python3.7
+      Runtime: python3.11
       Timeout: 900
       MemorySize: 3008
 
@@ -91,7 +91,7 @@ Resources:
        Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
        CodeUri: lambda-code/decompress_zlib
        Handler: lambda_function.decompress
-       Runtime: python3.7
+       Runtime: python3.11
        Timeout: 900
        MemorySize: 3008
 
@@ -103,7 +103,7 @@ Resources:
        Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
        CodeUri: lambda-code/decompress_zstd
        Handler: lambda_function.decompress
-       Runtime: python3.7
+       Runtime: python3.11
        Timeout: 900
        MemorySize: 3008
      Metadata:
@@ -117,7 +117,7 @@ Resources:
        Role: !GetAtt S3ObjectLambdaDecompressionRole.Arn
        CodeUri: lambda-code/decompress_snappy
        Handler: lambda_function.decompress
-       Runtime: python3.7
+       Runtime: python3.11
        Timeout: 900
        MemorySize: 3008
      Metadata:

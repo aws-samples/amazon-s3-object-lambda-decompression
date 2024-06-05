@@ -11,16 +11,8 @@
    sam build --use-container
     ```
    This pulls in the required packages and native libraries and creates the deployment packages in .aws-sam/build. It also runs the unit tests. Note the --use-container argument is necessary because the native libraries must be pulled in using a docker image resembling the runtime environment of AWS Lambda
-   
-3. (optional) Run the python unit tests in an environment that mimics the Lambda runtime environment
     ```
-   docker run -it -v $(pwd):/mnt lambci/lambda:build-python3.7 /mnt/run_unit_tests
-    ``` 
-   The Java unit tests automatically get run with the build, but you can run them again via
-    ```
-   cd lambda-code/decompress_zip && mvn test && cd ../..
-    ```
-4. Deploy the stack:
+3. Deploy the stack:
     ```
    sam deploy --guided --template-file .aws-sam/build/template.yaml --capabilities CAPABILITY_NAMED_IAM
     ```

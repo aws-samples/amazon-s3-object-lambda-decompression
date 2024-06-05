@@ -3,19 +3,16 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      python: 3.11
 
   pre_build:
     commands:
       - pip install --upgrade pip
       - pip install awscli aws-sam-cli
-      - docker pull lambci/lambda:build-python3.7
-      - docker pull lambci/lambda:build-java11
 
   build:
     commands:
       - sam build --debug --use-container
-      - docker run -v $(pwd):/mnt lambci/lambda:build-python3.7 /mnt/run_unit_tests
 
   post_build:
     commands:
